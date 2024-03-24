@@ -62,6 +62,14 @@ send-packet SOURCE:
     echo "Sending a packet with the values from the config..."
     node scripts/private/_send-packet-config.js {{SOURCE}}
 
+deposit-eth SOURCE:
+    echo "Sending a packet with the values from the config..."
+    node scripts/gift/deposit-eth.js --network {{SOURCE}}
+
+create-gift-link SOURCE:
+    echo "Sending a packet with the values from the config..."
+    node scripts/gift/create-gift-link.js --network {{SOURCE}}
+
 # Switch between the sim client and the client with proofs
 # Usage: just switch-client
 switch-client:

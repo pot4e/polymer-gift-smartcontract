@@ -21,7 +21,7 @@ contract XGif is CustomChanIbcApp {
     struct Gift {
         address sender;
         address receiver;
-        uint amount;
+        uint256 amount;
         bool isClaimed;
         bool isCancelled;
         IbcPacketStatus ibcStatus;
@@ -80,7 +80,7 @@ contract XGif is CustomChanIbcApp {
         bytes32 channelId,
         uint64 timeoutSeconds,
         address _receiver,
-        uint _amount
+        uint256 _amount
     ) external returns (bytes32) {
         require(_receiver != address(0), "Invalid receiver address");
         require(_amount > 0, "Invalid gift amount");
