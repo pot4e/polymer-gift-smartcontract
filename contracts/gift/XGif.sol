@@ -15,7 +15,8 @@ contract XGif is CustomChanIbcApp {
     }
     enum IbcPacketType {
         DEPOSIT,
-        GIFT
+        GIFT,
+        CLAIM
     }
     struct Gift {
         address sender;
@@ -182,7 +183,11 @@ contract XGif is CustomChanIbcApp {
      * @dev Allows users to claim a gift by providing the gift ID.
      * @param _giftId The ID of the gift to claim.
      */
-    function claimGift(string memory _giftId) external {
+    function claimGift(
+        bytes32 channelId,
+        uint64 timeoutSeconds,
+        string memory _giftId
+    ) external {
         require(
             gifts[_giftId].receiver == msg.sender,
             "You are not the intended receiver of this gift"
@@ -193,12 +198,12 @@ contract XGif is CustomChanIbcApp {
         );
         require(!gifts[_giftId].isClaimed, "Gift has already been claimed");
         require(!gifts[_giftId].isCancelled, "Gift has been cancelled");
-
-        uint amount = gifts[_giftId].amount;
-        gifts[_giftId].ibcStatus = IbcPacketStatus.ACKED;
-        gifts[_giftId].isClaimed = true;
-        balancesOf[msg.sender] += amount;
-        payable(msg.sender).transfer(amount);
+        // Send packet
+        sendPacket(
+            channelId,
+            timeoutSeconds,
+            abi.encode(msg.sender, 0, IbcPacketType.DEPOSIT, _giftId)
+        );
     }
 
     /**
@@ -278,6 +283,8 @@ contract XGif is CustomChanIbcApp {
             );
         } else if (packetType == IbcPacketType.GIFT) {
             onRecvGiftPacket(_caller, _id, abi.decode(data, (Gift)));
+        } else if (packetType == IbcPacketType.CLAIM) {
+            onClaimGif(_caller, abi.decode(data, (string)));
         } else {
             revert("Invalid packet type");
         }
@@ -303,6 +310,14 @@ contract XGif is CustomChanIbcApp {
         gifts[giftId].ibcStatus == IbcPacketStatus.SENT;
         giftLinksOf[caller].push(giftId);
         balancesOf[msg.sender] -= gif.amount;
+    }
+
+    function onClaimGif(address caller, string memory _giftId) internal {
+        uint amount = gifts[_giftId].amount;
+        gifts[_giftId].ibcStatus = IbcPacketStatus.SENT;
+        gifts[_giftId].isClaimed = true;
+        balancesOf[caller] += amount;
+        payable(caller).transfer(amount);
     }
 
     /**
