@@ -62,6 +62,14 @@ send-packet SOURCE:
     echo "Sending a packet with the values from the config..."
     node scripts/private/_send-packet-config.js {{SOURCE}}
 
+deposit-eth SOURCE:
+    echo "Sending a packet with the values from the config..."
+    node scripts/gift/deposit-eth.js --network {{SOURCE}}
+
+create-gift-link SOURCE:
+    echo "Sending a packet with the values from the config..."
+    node scripts/gift/create-gift-link.js --network {{SOURCE}}
+
 # Switch between the sim client and the client with proofs
 # Usage: just switch-client
 switch-client:
@@ -74,7 +82,7 @@ switch-client:
 # Usage: just do-it
 do-it:
     echo "Running the full E2E flow..."
-    just set-contracts optimism XCounter false && just set-contracts base XCounter false
+    just set-contracts optimism XGif false && just set-contracts base XGif false
     just deploy optimism base
     just sanity-check
     just create-channel
