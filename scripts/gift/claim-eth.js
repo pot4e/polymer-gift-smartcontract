@@ -22,23 +22,21 @@ async function depositEth() {
   const channelId = sendConfig[`${networkName}`]["channelId"];
   const channelIdBytes = hre.ethers.encodeBytes32String(channelId);
   const timeoutSeconds = sendConfig[`${networkName}`]["timeout"];
-  const senderBalance = await hre.ethers.provider.getBalance(
-    accounts[0].address
-  );
-  console.log("Sender balance: ", hre.ethers.formatEther(senderBalance));
   const tx = await ibcApp
-    .connect(accounts[0])
-    .deposit(channelIdBytes, timeoutSeconds, {
-      value: hre.ethers.parseEther("0.0001"),
-      gasLimit: 1000000,
-    });
-  console.log("Deposit tx hash: ", tx.hash);
+    .connect(accounts[1])
+    .claimGift(channelIdBytes, timeoutSeconds, '0xbc63d901159cfd8772a8382b61b2d9f11340ca462bc4ed751488439ee9c41f4f');
+  console.log("Tx hash: ", tx.hash);
 
   const balance = await ibcApp
     .connect(accounts[0])
     .balancesOf(accounts[0]);
   console.log("Balance: ", balance);
   console.log("Balance: ", hre.ethers.formatEther(balance));
+
+  const gifts = await ibcApp
+    .connect(accounts[0])
+    .getGiftsByUser(accounts[0]);
+  console.log("Balance: ", gifts);
 }
 
 async function main() {
