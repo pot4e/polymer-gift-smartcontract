@@ -19,31 +19,21 @@ async function createGiftLink() {
   const ibcApp = await getIbcApp(networkName);
 
   // Do logic to prepare the packet
-  // const channelId = sendConfig[`${networkName}`]["channelId"];
-  // const channelIdBytes = hre.ethers.encodeBytes32String(channelId);
-  // const timeoutSeconds = sendConfig[`${networkName}`]["timeout"];
-
-  console.log(
-    await ibcApp.connect(accounts[0]).balancesOf(accounts[0].address)
-  );
+  const channelId = sendConfig[`${networkName}`]["channelId"];
+  const channelIdBytes = hre.ethers.encodeBytes32String(channelId);
+  const timeoutSeconds = sendConfig[`${networkName}`]["timeout"];
 
   const gifId = await ibcApp
     .connect(accounts[0])
-    .createGift(
-      accounts[1].address,
-      hre.ethers.parseEther("0.000001")
-    );
-  console.log("Gift ID: ", gifId);
-
-  const gifts = await ibcApp
-      .connect(accounts[0])
-      .getGiftsByUser(accounts[0]);
-  console.log("Gifts: ", gifts);
+    .createGift(channelIdBytes, timeoutSeconds, accounts[1].address, {
+      value: hre.ethers.parseEther("0.0001"),
+    });
+  console.log("Gift Tx ", gifId.hash);
 }
 
 async function main() {
   try {
-    // await setupIbcPacketEventListener();
+    await setupIbcPacketEventListener();
     await createGiftLink();
   } catch (error) {
     console.error("❌ Error sending packet: ", error);

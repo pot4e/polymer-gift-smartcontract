@@ -9,7 +9,7 @@ const { getConfigPath } = require("../private/_helpers");
 const { getIbcApp } = require("../private/_vibc-helpers.js");
 const { setupIbcPacketEventListener } = require("../private/_events.js");
 
-async function depositEth() {
+async function listGift() {
   const accounts = await hre.ethers.getSigners();
   const config = require(getConfigPath());
   const sendConfig = config.sendPacket;
@@ -19,32 +19,17 @@ async function depositEth() {
   const ibcApp = await getIbcApp(networkName);
 
   // Do logic to prepare the packet
-  const channelId = sendConfig[`${networkName}`]["channelId"];
-  const channelIdBytes = hre.ethers.encodeBytes32String(channelId);
-  const timeoutSeconds = sendConfig[`${networkName}`]["timeout"];
-  const senderBalance = await hre.ethers.provider.getBalance(
-    accounts[0].address
-  );
-  console.log("Sender balance: ", hre.ethers.formatEther(senderBalance));
-  const tx = await ibcApp
-    .connect(accounts[0])
-    .deposit(channelIdBytes, timeoutSeconds, {
-      value: hre.ethers.parseEther("0.0001"),
-      gasLimit: 1000000,
-    });
-  console.log("Deposit tx hash: ", tx.hash);
+  // const channelId = sendConfig[`${networkName}`]["channelId"];
+  // const channelIdBytes = hre.ethers.encodeBytes32String(channelId);
+  // const timeoutSeconds = sendConfig[`${networkName}`]["timeout"];
 
-  const balance = await ibcApp
-    .connect(accounts[0])
-    .balancesOf(accounts[0]);
-  console.log("Balance: ", balance);
-  console.log("Balance: ", hre.ethers.formatEther(balance));
+  const gifts = await ibcApp.getGiftsByUser(accounts[1]);
+  console.log("Gifts: ", gifts);
 }
 
 async function main() {
   try {
-    await setupIbcPacketEventListener();
-    await depositEth();
+    await listGift();
   } catch (error) {
     console.error("❌ Error sending packet: ", error);
     process.exit(1);

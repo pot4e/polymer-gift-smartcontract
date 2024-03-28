@@ -5,7 +5,7 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
-const { getConfigPath } = require("../private/_helpers");
+const { getConfigPath } = require("../private/_helpers.js");
 const { getIbcApp } = require("../private/_vibc-helpers.js");
 const { setupIbcPacketEventListener } = require("../private/_events.js");
 
@@ -22,21 +22,16 @@ async function depositEth() {
   const channelId = sendConfig[`${networkName}`]["channelId"];
   const channelIdBytes = hre.ethers.encodeBytes32String(channelId);
   const timeoutSeconds = sendConfig[`${networkName}`]["timeout"];
+
   const tx = await ibcApp
     .connect(accounts[1])
-    .claimGift(channelIdBytes, timeoutSeconds, '0xbc63d901159cfd8772a8382b61b2d9f11340ca462bc4ed751488439ee9c41f4f');
+    .claimGift(
+      channelIdBytes,
+      timeoutSeconds,
+      "0xf1a02433cca29c1da8030401129b6a4bd05e84e0ebbc5b31a4a034bf7f5b3bda"
+    );
   console.log("Tx hash: ", tx.hash);
 
-  const balance = await ibcApp
-    .connect(accounts[0])
-    .balancesOf(accounts[0]);
-  console.log("Balance: ", balance);
-  console.log("Balance: ", hre.ethers.formatEther(balance));
-
-  const gifts = await ibcApp
-    .connect(accounts[0])
-    .getGiftsByUser(accounts[0]);
-  console.log("Balance: ", gifts);
 }
 
 async function main() {

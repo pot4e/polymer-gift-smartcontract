@@ -62,17 +62,17 @@ send-packet SOURCE:
     echo "Sending a packet with the values from the config..."
     node scripts/private/_send-packet-config.js {{SOURCE}}
 
-deposit-eth SOURCE:
-    echo "Sending a packet with the values from the config..."
-    npx hardhat run scripts/gift/deposit-eth.js --network {{SOURCE}}
-
 create-gift-link SOURCE:
     echo "Sending a packet with the values from the config..."
     npx hardhat run scripts/gift/create-gift-link.js --network {{SOURCE}}
 
-claim-eth SOURCE:
+claim-gift SOURCE:
     echo "Sending a packet with the values from the config..."
-    npx hardhat run scripts/gift/claim-eth.js --network {{SOURCE}}
+    npx hardhat run scripts/gift/claim-gift.js --network {{SOURCE}}
+
+list-gift SOURCE:
+    echo "Sending a packet with the values from the config..."
+    npx hardhat run scripts/gift/list-gift.js --network {{SOURCE}}
 
 # Switch between the sim client and the client with proofs
 # Usage: just switch-client
@@ -93,13 +93,12 @@ do-it:
     just send-packet optimism
     echo "You've done it!"
 
-do-gif:
+do-gift:
     echo "Running the full E2E flow..."
     just set-contracts optimism XGift false && just set-contracts base XGiftVault false
     just deploy optimism base
     just sanity-check
     just create-channel
-    just deposit-eth optimism
     echo "You've done it!"
 
 # Clean up the environment by removing the artifacts and cache folders and running the forge clean command
