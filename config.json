@@ -1,28 +1,28 @@
 {
   "proofsEnabled": false,
   "deploy": {
-    "optimism": "XGif",
-    "base": "XGif"
+    "optimism": "XGift",
+    "base": "XGiftVault"
   },
   "isUniversal": false,
   "createChannel": {
     "srcChain": "optimism",
-    "srcAddr": "0x860e936a0E4103dF504a4ff9443FF231f3ac5Fbe",
+    "srcAddr": "0xb319BA6B6D4178B862D2242D1BC4359ffB391E2A",
     "dstChain": "base",
-    "dstAddr": "0xa32f2De9C00675C0F2D88F7679bcc6151593927E",
+    "dstAddr": "0x2B8918141cE8280AE3003CDF768F7597991adEA8",
     "version": "1.0",
     "ordering": 0,
     "fees": false
   },
   "sendPacket": {
     "optimism": {
-      "portAddr": "0x860e936a0E4103dF504a4ff9443FF231f3ac5Fbe",
-      "channelId": "channel-39330",
+      "portAddr": "0xb319BA6B6D4178B862D2242D1BC4359ffB391E2A",
+      "channelId": "channel-39824",
       "timeout": 36000
     },
     "base": {
-      "portAddr": "0xa32f2De9C00675C0F2D88F7679bcc6151593927E",
-      "channelId": "channel-39331",
+      "portAddr": "0x2B8918141cE8280AE3003CDF768F7597991adEA8",
+      "channelId": "channel-39825",
       "timeout": 36000
     }
   },

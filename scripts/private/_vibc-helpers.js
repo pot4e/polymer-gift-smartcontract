@@ -13,6 +13,7 @@ async function getIbcApp (network) {
         const ibcAppAddr = config.isUniversal ? config["sendUniversalPacket"][`${network}`]["portAddr"] : config["sendPacket"][`${network}`]["portAddr"];
         console.log(`🗄️  Fetching IBC app on ${network} at address: ${ibcAppAddr}`)
         const contractType = config["deploy"][`${network}`];
+        console.log(contractType, network)
         const ibcApp = await ethers.getContractAt(
             `${contractType}`,
             ibcAppAddr
