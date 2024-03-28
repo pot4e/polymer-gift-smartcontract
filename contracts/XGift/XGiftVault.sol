@@ -7,38 +7,36 @@ import "./XGiftBase.sol";
 contract XGiftVault is XGiftBase {
     constructor(IbcDispatcher _dispatcher) XGiftBase(_dispatcher) {}
 
-    function deposit(
+    function createGift(
         bytes32 channelId,
-        uint64 timeoutSeconds
+        uint64 timeoutSeconds,
+        address _receiver
     ) external payable {
-        require(msg.value > 0, "Deposit amount must be greater than zero");
+        require(msg.value > 0, "Gift amount must be greater than zero");
+        require(
+            _receiver != msg.sender,
+            "Sender and receiver cannot be the same"
+        );
         // Save ibc packet
         bytes32 packetId = keccak256(
             abi.encodePacked(msg.sender, block.timestamp)
         );
-        IbcPacketBalance memory payload = IbcPacketBalance({
+        IbcPacketCreateGift memory payload = IbcPacketCreateGift({
             id: packetId,
             amount: msg.value,
             sender: msg.sender,
+            receiver: _receiver,
             ibcStatus: IbcPacketStatus.UNSENT
         });
-        depositPackets[packetId] = payload;
+        createGiftPackets[packetId] = payload;
         bytes memory data = abi.encode(payload);
-        emit Deposit(msg.sender, msg.value, packetId);
+        emit CreateGif(msg.sender, msg.value, packetId);
         // Send packet
         sendPacket(
             channelId,
             timeoutSeconds,
-            abi.encode(IbcPacketType.DEPOSIT, data)
+            abi.encode(IbcPacketType.CREATE_GIFT, data)
         );
-    }
-
-    function withdraw(uint _amount) external {
-        require(_amount > 0, "Withdraw amount must be greater than zero");
-        require(balancesOf[msg.sender] >= _amount, "Insufficient balance");
-
-        balancesOf[msg.sender] -= _amount;
-        payable(msg.sender).transfer(_amount);
     }
 
     // ----------------------- IBC logic  -----------------------
@@ -52,10 +50,10 @@ contract XGiftVault is XGiftBase {
         IbcPacket memory packet
     ) external override onlyIbcDispatcher returns (AckPacket memory ackPacket) {
         recvedPackets.push(packet);
-        (
-            IbcPacketType packetType,
-            bytes memory data
-        ) = abi.decode(packet.data, (IbcPacketType, bytes));
+        (IbcPacketType packetType, bytes memory data) = abi.decode(
+            packet.data,
+            (IbcPacketType, bytes)
+        );
 
         if (packetType == IbcPacketType.CLAIM) {
             Gift memory gift = abi.decode(data, (Gift));
@@ -78,16 +76,18 @@ contract XGiftVault is XGiftBase {
         AckPacket calldata ack
     ) external override onlyIbcDispatcher {
         ackPackets.push(ack);
-        (
-            IbcPacketType packetType,
-            bytes memory data
-        ) = abi.decode(ack.data, (IbcPacketType, bytes));
+        (IbcPacketType packetType, bytes memory data) = abi.decode(
+            ack.data,
+            (IbcPacketType, bytes)
+        );
 
-        if (packetType == IbcPacketType.DEPOSIT) {
-            IbcPacketBalance memory balance = abi.decode(data, (IbcPacketBalance));
-            balancesOf[balance.sender] += balance.amount;
-            depositPackets[balance.id].ibcStatus = IbcPacketStatus.ACKED;
-            emit AckDeposit(balance.sender, balance.amount, balance.id);
+        if (packetType == IbcPacketType.CREATE_GIFT) {
+            IbcPacketCreateGift memory gift = abi.decode(
+                data,
+                (IbcPacketCreateGift)
+            );
+            createGiftPackets[gift.id].ibcStatus = IbcPacketStatus.ACKED;
+            emit AckDeposit(gift.sender, gift.amount, gift.id);
         } else {
             revert("Invalid packet type");
         }

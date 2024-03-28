@@ -13,7 +13,7 @@ contract XGiftBase is CustomChanIbcApp {
     }
 
     enum IbcPacketType {
-        DEPOSIT,
+        CREATE_GIFT,
         GIFT,
         CLAIM
     }
@@ -28,22 +28,22 @@ contract XGiftBase is CustomChanIbcApp {
         bool isCancelled;
     }
 
-    struct IbcPacketBalance {
+    struct IbcPacketCreateGift {
         bytes32 id;
-        uint amount;
         address sender;
+        address receiver;
+        uint amount;
         IbcPacketStatus ibcStatus;
     }
 
-    mapping(bytes32 => IbcPacketBalance) public depositPackets;
+    mapping(bytes32 => IbcPacketCreateGift) public createGiftPackets;
 
-    mapping(address => uint) public balancesOf;
     mapping(bytes32 => Gift) public gifts;
     mapping(address => bytes32[]) public giftLinksOf;
 
     event ClaimGift(address indexed receiver, uint256 amount, bytes32 id);
     event AckClaimGift(address indexed receiver, uint256 amount, bytes32 id);
-    event Deposit(address indexed sender, uint256 amount, bytes32 id);
+    event CreateGif(address indexed sender, uint256 amount, bytes32 id);
     event AckDeposit(address indexed sender, uint256 amount, bytes32 id);
 
     constructor(IbcDispatcher _dispatcher) CustomChanIbcApp(_dispatcher) {}
