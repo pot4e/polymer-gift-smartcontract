@@ -2,11 +2,17 @@
 This repository is created to enter the PIT phase 1 challenge # 19
 
 ## Team Members
+
 Danh Nguyen - Team Leader
+
 Nguyen Dinh Chau - Developer
+
 Vinh Nhan - Developer
+
 Ly ho -  Developer
+
 Tuan Tran - Developer
+
 Anh Nguyen - Developer
 
 ## Description
