@@ -1,14 +1,20 @@
 # PIT Phase 1 repo project: Cross-chain give GIFs
-
+This repository is created to enter the PIT phase 1 challenge # 19
 
 ## Team Members
-
+Danh Nguyen - Team Leader
+Nguyen Dinh Chau - Developer
+Vinh Nhan - Developer
+Ly ho -  Developer
+Tuan Tran - Developer
+Anh Nguyen - Developer
 
 ## Description
 
-A and B are friends, A has used both Base and OP networks, while B only knows how to use the OP network. A wants to introduce B to use the Base network, so A has created a gif link for B to claim and receive eth on the Base network.
+XGift is a decentralized application (dApp) that provides a new way to send and receive gifts in the form of gifs and ETH. Designed with application-specific chaining and scrolling properties, XGift allows users to create gift links on the Base Sepolia network, which can then be claimed on the OP Sepolia network, receiving ETH gifts as part of the claims process.
 
-This application allows users to create gifs on the Base Sepolia network. Gif information will be sent to an XGif contract on the OP Sepolia network for users on the OP Sepolia network to claim gifs and receive eth gifts on the Base Sepolia network.
+This DApp uses Polymer x IBC as the cross-chain format to seamlessly connect the two networks, ensuring a smooth and intuitive user experience. Whether you're new to the Base network or a seasoned OP user, XGift provides an engaging and rewarding way to explore the possibilities of both chains.
+
 
 Features:
 
