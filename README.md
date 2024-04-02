@@ -3,17 +3,17 @@ This repository is created to enter the PIT phase 1 challenge # 19
 
 ## Team Members
 
-Danh Nguyen - Team Leader
+@daningyn - Team Leader
 
-Nguyen Dinh Chau - Developer
+@batuoc263 - Developer
 
-Vinh Nhan - Developer
+@kushin101094 - Developer
 
-Ly ho -  Developer
+@lyhv -  Developer
 
-Tuan Tran - Developer
+@ThanhTuan1695 - Developer
 
-Anh Nguyen - Developer
+@tuananhht94 - Developer
 
 ## Description
 
@@ -98,7 +98,7 @@ just claim-gift optimism
 
 ## Proof of testnet interaction
 
-After following the steps above you should have interacted with the testnet. You can check this at the [IBC Explorer](https://explorer.ethdenver.testnet.polymer.zone/).
+After following the steps above you should have interacted with the testnet. You can check this at the [IBC Explorer](https://sepolia.polymer.zone/packets).
 
 Here's the data of our application:
 
