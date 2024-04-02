@@ -1,4 +1,4 @@
-# PIT Phase 1 repo project: Cross-chain give GIFs
+# PIT Phase 1 repo project: Cross-chain give GIFTs
 This repository is created to enter the PIT phase 1 challenge # 19
 
 ## Team Members
